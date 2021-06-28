@@ -1,20 +1,30 @@
 # cambalache-web
+Frontend Web de la Aplicación Cambalache.
 
-## Build Setup
+## Requisitos
+* [Node.js v14](https://nodejs.org/)
+* [NVM: Node Version Manager](https://github.com/nvm-sh/nvm) (opcional para ejecutar múltiples versiones de Node.js lado a lado)
+* [Nuxt.js](https://nuxtjs.org)
 
-```bash
-# install dependencies
-$ npm install
 
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
+## Preparación
+```shell
+nvm install 14
+nvm use 14
+[[ -d node_modules ]] && rm -rf node_modules
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+
+## Compilación y Ejecución
+Ejecutar los siguientes comandos para compilar e iniciar la aplicación.
+```shell
+# Instalar dependencias
+npm install
+
+# Ejecutar localmente con hot reload en localhost:3000
+npm run dev
+
+# Compilar para producción e iniciar servidor
+npm run build
+npm run start
+```
