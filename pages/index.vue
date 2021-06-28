@@ -31,7 +31,7 @@
     </v-row>
     <v-row v-else justify="center">
       <v-col class="text-center">
-        <div>
+        <div class="mb-5">
           <v-icon color="grey--text" size="128">fas fa-box</v-icon>
         </div>
         <h1 class="grey--text">No hay datos para mostrar</h1>
