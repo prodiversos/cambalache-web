@@ -62,13 +62,13 @@ export default {
     theme: {
       themes: {
         light: {
-          primary: colors.lime.base,
-          accent: colors.lime.accent1,
-          secondary: colors.orange.base,
-          info: colors.lime.lighten5,
+          primary: colors.lightGreen.base,
+          secondary: colors.lightGreen.darken4,
+          accent: colors.orange.darken1,
+          info: colors.lightGreen.lighten5,
           warning: colors.amber.base,
           error: colors.deepOrange.darken4,
-          success: colors.lime.darken3
+          success: colors.lightGreen.darken3
         }
       }
     }

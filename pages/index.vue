@@ -1,8 +1,9 @@
 <template>
-  <v-container fluid class="py-8 px-6">
+  <v-container fluid fill-height class="grey lighten-5 pa-5">
     <v-navigation-drawer v-model="drawer" app fixed clipped width="300px">
       <v-sheet
-        color="grey lighten-4"
+        dark
+        color="accent"
         class="overflow-y-auto mb-4"
         max-height="600"
       >
@@ -11,37 +12,53 @@
         </div>
       </v-sheet>
 
-      <span v-show="busquedaTipoArticulo.isRunning">Cargando...</span>
-
+      <!-- Panel de búsqueda y paginación -->
       <panel-busqueda-anuncio
         :tipo-articulo-list="busquedaTipoArticulo.output"
         v-bind.sync="busquedaAnuncio.params"
+        :next-button="busquedaAnuncio.output && busquedaAnuncio.output.length === busquedaAnuncio.params.pageSize"
         @buscar="buscarAnuncio"
       ></panel-busqueda-anuncio>
     </v-navigation-drawer>
 
-    <v-row>
-      <v-col>
-        <!-- TODO: Agregar panel de resultados búsqueda -->
-        <v-sheet v-for="anuncio of busquedaAnuncio.output" :key="anuncio.idAnuncio"
-                 class="pa-5 mb-3"
-        >
-          <h1>{{ anuncio.titulo }}</h1>
-        </v-sheet>
+    <v-row v-if="busquedaAnuncio.output.length > 0" justify="center">
+      <v-col v-for="anuncio of busquedaAnuncio.output"
+             :key="anuncio.idAnuncio"
+             cols="3"
+      >
+        <anuncio-card v-bind="{ anuncio }" />
       </v-col>
     </v-row>
+    <v-row v-else justify="center">
+      <v-col class="text-center">
+        <div>
+          <v-icon color="grey--text" size="128">fas fa-box</v-icon>
+        </div>
+        <h1 class="grey--text">No hay datos para mostrar</h1>
+      </v-col>
+    </v-row>
+
+    <v-snackbar v-if="busquedaTipoArticulo.error" :value="!!busquedaTipoArticulo.error" color="error">
+      {{ busquedaTipoArticulo.error.message ||busquedaTipoArticulo.error }}
+    </v-snackbar>
+
+    <v-snackbar v-if="busquedaAnuncio.error" :value="!!busquedaAnuncio.error" color="error">
+      {{ busquedaAnuncio.error.message ||busquedaAnuncio.error }}
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
 import PanelBusquedaAnuncio from '~/components/anuncios/busqueda/PanelBusquedaAnuncio';
+import AnuncioCard from '~/components/anuncios/AnuncioCard';
 
 export default {
   head: {
     title: 'Búsqueda'
   },
   components: {
-    PanelBusquedaAnuncio
+    PanelBusquedaAnuncio,
+    AnuncioCard
   },
   data: () => ({
     drawer: true,
@@ -55,7 +72,9 @@ export default {
         titulo: null,
         idTipoArticulo: null,
         precioMinimo: 0,
-        precioMaximo: 1000000
+        precioMaximo: 1000000,
+        pageNumber: 1,
+        pageSize: 10
       },
       isRunning: false,
       output: [],
@@ -81,7 +100,7 @@ export default {
 
       try {
         const { result } = await this.$axios.$get('http://localhost:8080/tipo-articulo');
-        this.busquedaTipoArticulo.output = result;
+        this.busquedaTipoArticulo.output = result || [];
         await this.buscarAnuncio();
       } catch (error) {
         this.busquedaTipoArticulo.error = error;
@@ -94,19 +113,24 @@ export default {
         return;
       }
 
+      const params = {
+        ...this.busquedaAnuncio.params
+      };
+
+      if (!params.pageNumber || !params.pageSize) {
+        return;
+      }
+
+      params.titulo = `%${(params.titulo || '').trim()}%`
+      params.pageOffset = (params.pageNumber || 1) - 1;
+      delete params.pageNumber;
+
       this.busquedaAnuncio.isRunning = true;
       this.busquedaAnuncio.error = null;
 
       try {
-
-        const params = {
-          ...this.busquedaAnuncio.params
-        };
-
-        params.titulo = `%${(params.titulo || '').trim()}%`
-
         const { result } = await this.$axios.$get('http://localhost:8080/anuncio', { params });
-        this.busquedaAnuncio.output = result;
+        this.busquedaAnuncio.output = result || [];
 
       } catch (error) {
         this.busquedaAnuncio.error = error;

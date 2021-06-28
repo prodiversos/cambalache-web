@@ -33,7 +33,7 @@
           <v-col>
             <v-range-slider
               label="Precio"
-              :hint="`${currencyFormat.format(precioMinimo)} - ${currencyFormat.format(precioMaximo)}`"
+              :hint="`${formatter.formatCurrency(precioMinimo)} - ${formatter.formatCurrency(precioMaximo)}`"
               persistent-hint
               min="0"
               max="1000000"
@@ -67,6 +67,18 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col>
+        <v-text-field
+          label="Resultados por Página"
+          outlined
+          dense
+          type="number"
+          :value="pageSize"
+          @input="value => syncProp('pageSize', value)"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col class="text-center">
         <v-btn tile x-large color="primary" @click="$emit('buscar')">
           <v-icon left>fas fa-search</v-icon>
@@ -74,10 +86,39 @@
         </v-btn>
       </v-col>
     </v-row>
+
+    <v-divider class="my-5"></v-divider>
+
+    <div class="h4 grey--text text-center">
+      Página {{ pageNumber }}
+    </div>
+
+    <v-row justify="space-around" class="py-5">
+      <v-col>
+        <v-btn :disabled="pageNumber === 1"
+               text
+               color="accent"
+               @click="syncProp('pageNumber', pageNumber - 1)"
+        >
+          Anterior
+        </v-btn>
+      </v-col>
+      <v-col>
+        <v-btn :disabled="!nextButton"
+               text
+               color="accent"
+               @click="syncProp('pageNumber', pageNumber + 1)"
+        >
+          Siguiente
+        </v-btn>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
+import formatter from '~/lib/formatter';
+
 export default {
   name: 'PanelBusquedaAnuncio',
   props: {
@@ -85,15 +126,24 @@ export default {
     tipoArticuloList: Array,
     idTipoArticulo: String,
     precioMinimo: Number,
-    precioMaximo: Number
+    precioMaximo: Number,
+    pageNumber: Number,
+    pageSize: Number,
+    nextButton: {
+      type: Boolean,
+      default: false
+    }
   },
   data: () => ({
-    currencyFormat: new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }),
+    formatter,
     tipoArticulo: null
   }),
   methods: {
     syncProp(prop, value) {
-      this.$emit(`update:${prop}`, value)
+      this.$emit(`update:${prop}`, value);
+      if (prop !== 'pageNumber') {
+        this.$emit('update:pageNumber', 1);
+      }
     },
     syncProps(props, values) {
       props.forEach((prop, index) => {
