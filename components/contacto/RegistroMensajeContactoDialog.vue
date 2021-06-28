@@ -58,18 +58,12 @@
         </v-card-actions>
       </v-card>
     </v-form>
-
-    <v-snackbar v-if="creacionMensajeContacto.output" :value="true" color="success">
-      Tu comentario se ha registrado con éxito.
-    </v-snackbar>
-
-    <v-snackbar v-if="creacionMensajeContacto.error" :value="true" color="error">
-      {{ creacionMensajeContacto.error.message || creacionMensajeContacto.error }}
-    </v-snackbar>
   </v-dialog>
 </template>
 
 <script>
+import backendError from '~/lib/backend-error';
+
 export default {
   name: 'RegistroMensajeContactoDialog',
   props: {
@@ -130,13 +124,7 @@ export default {
         this.$emit('success', result);
         this.close();
       } catch (error) {
-        let info;
-        if (!error.response || error.response.status === 500) {
-          info = { message: 'Error desconocido.' };
-        } else {
-          info = error.response.data;
-        }
-        this.$emit('error', info);
+        this.$emit('error', backendError(error));
       } finally {
         this.creacionMensajeContacto.isExecuting = false;
       }

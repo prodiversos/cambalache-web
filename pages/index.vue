@@ -57,6 +57,7 @@
 <script>
 import PanelBusquedaAnuncio from '~/components/anuncios/busqueda/PanelBusquedaAnuncio';
 import AnuncioCard from '~/components/anuncios/AnuncioCard';
+import backendError from '~/lib/backend-error';
 
 export default {
   head: {
@@ -109,11 +110,7 @@ export default {
         this.busquedaTipoArticulo.output = result || [];
         await this.buscarAnuncio();
       } catch (error) {
-        if (!error.response || error.response.status === 500) {
-          this.busquedaTipoArticulo.error = { message: 'Error desconocido.' };
-        } else {
-          this.busquedaTipoArticulo.error = error.response.data;
-        }
+        this.busquedaTipoArticulo.error = backendError(error);
       } finally {
         this.busquedaTipoArticulo.isRunning = false;
       }
@@ -143,11 +140,7 @@ export default {
         this.busquedaAnuncio.output = result || [];
 
       } catch (error) {
-        if (!error.response || error.response.status === 500) {
-          this.busquedaAnuncio.error = { message: 'Error desconocido.' };
-        } else {
-          this.busquedaAnuncio.error = error.response.data;
-        }
+        this.busquedaAnuncio.error = backendError(error);
       } finally {
         this.busquedaAnuncio.isRunning = false;
       }

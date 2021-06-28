@@ -25,8 +25,13 @@
     <v-snackbar v-if="resultadoMensajeContacto.exito" :value="true" color="success">
       Tu comentario se ha registrado con éxito.
     </v-snackbar>
-    <v-snackbar v-if="resultadoMensajeContacto.error" :value="true" color="error">
+
+    <v-snackbar v-if="resultadoMensajeContacto.error" :value="true" color="error" :multi-line="resultadoMensajeContacto.error.details">
       {{ resultadoMensajeContacto.error.message || resultadoMensajeContacto.error }}
+      <small v-for="(detail, index) of resultadoMensajeContacto.error.details" :key="`error_detail_${index}`">
+        <br>
+        {{ detail }}
+      </small>
     </v-snackbar>
   </v-app>
 </template>
