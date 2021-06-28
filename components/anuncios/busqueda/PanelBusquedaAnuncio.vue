@@ -37,6 +37,7 @@
               persistent-hint
               min="0"
               max="1000000"
+              step="500"
               :value="[ precioMinimo, precioMaximo ]"
               @input="value => syncProps(['precioMinimo', 'precioMaximo'], value)"
             ></v-range-slider>
@@ -74,7 +75,7 @@
           dense
           type="number"
           :value="pageSize"
-          @input="value => syncProp('pageSize', value)"
+          @input="value => syncProp('pageSize', Number(value || 1))"
         ></v-text-field>
       </v-col>
     </v-row>
