@@ -38,12 +38,12 @@
       </v-col>
     </v-row>
 
-    <v-snackbar v-if="busquedaTipoArticulo.error" :value="!!busquedaTipoArticulo.error" color="error">
-      {{ busquedaTipoArticulo.error.message ||busquedaTipoArticulo.error }}
+    <v-snackbar v-if="busquedaTipoArticulo.error" :value="true" color="error">
+      {{ busquedaTipoArticulo.error.message || busquedaTipoArticulo.error }}
     </v-snackbar>
 
-    <v-snackbar v-if="busquedaAnuncio.error" :value="!!busquedaAnuncio.error" color="error">
-      {{ busquedaAnuncio.error.message ||busquedaAnuncio.error }}
+    <v-snackbar v-if="busquedaAnuncio.error" :value="true" color="error">
+      {{ busquedaAnuncio.error.message || busquedaAnuncio.error }}
     </v-snackbar>
   </v-container>
 </template>
