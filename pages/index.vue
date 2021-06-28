@@ -21,7 +21,13 @@
       ></panel-busqueda-anuncio>
     </v-navigation-drawer>
 
-    <v-row v-if="busquedaAnuncio.output.length > 0" justify="center">
+    <v-row v-if="busquedaAnuncio.isRunning" justify="center">
+      <v-col class="text-center">
+        <v-progress-circular indeterminate/>
+        <div class="subheading-1 gray--text my-4">Buscando...</div>
+      </v-col>
+    </v-row>
+    <v-row v-else-if="busquedaAnuncio.output.length > 0" justify="center">
       <v-col v-for="anuncio of busquedaAnuncio.output"
              :key="anuncio.idAnuncio"
              cols="3"
@@ -103,7 +109,11 @@ export default {
         this.busquedaTipoArticulo.output = result || [];
         await this.buscarAnuncio();
       } catch (error) {
-        this.busquedaTipoArticulo.error = error;
+        if (error.response.status === 500) {
+          this.busquedaTipoArticulo.error = { message: 'Error desconocido.' };
+        } else {
+          this.busquedaTipoArticulo.error = error.response.data;
+        }
       } finally {
         this.busquedaTipoArticulo.isRunning = false;
       }
@@ -133,7 +143,11 @@ export default {
         this.busquedaAnuncio.output = result || [];
 
       } catch (error) {
-        this.busquedaAnuncio.error = error;
+        if (error.response.status === 500) {
+          this.busquedaAnuncio.error = { message: 'Error desconocido.' };
+        } else {
+          this.busquedaAnuncio.error = error.response.data;
+        }
       } finally {
         this.busquedaAnuncio.isRunning = false;
       }

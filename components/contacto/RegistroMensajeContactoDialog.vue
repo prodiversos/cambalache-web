@@ -130,7 +130,13 @@ export default {
         this.$emit('success', result);
         this.close();
       } catch (error) {
-        this.$emit('error', error);
+        let info;
+        if (error.response.status === 500) {
+          info = { message: 'Error desconocido.' };
+        } else {
+          info = error.response.data;
+        }
+        this.$emit('error', info);
       } finally {
         this.creacionMensajeContacto.isExecuting = false;
       }
