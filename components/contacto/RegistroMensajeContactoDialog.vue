@@ -131,7 +131,7 @@ export default {
         this.close();
       } catch (error) {
         let info;
-        if (error.response.status === 500) {
+        if (!error.response || error.response.status === 500) {
           info = { message: 'Error desconocido.' };
         } else {
           info = error.response.data;

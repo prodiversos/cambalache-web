@@ -109,7 +109,7 @@ export default {
         this.busquedaTipoArticulo.output = result || [];
         await this.buscarAnuncio();
       } catch (error) {
-        if (error.response.status === 500) {
+        if (!error.response || error.response.status === 500) {
           this.busquedaTipoArticulo.error = { message: 'Error desconocido.' };
         } else {
           this.busquedaTipoArticulo.error = error.response.data;
@@ -143,7 +143,7 @@ export default {
         this.busquedaAnuncio.output = result || [];
 
       } catch (error) {
-        if (error.response.status === 500) {
+        if (!error.response || error.response.status === 500) {
           this.busquedaAnuncio.error = { message: 'Error desconocido.' };
         } else {
           this.busquedaAnuncio.error = error.response.data;
