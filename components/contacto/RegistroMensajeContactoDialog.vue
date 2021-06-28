@@ -124,7 +124,7 @@ export default {
 
       this.creacionMensajeContacto.isExecuting = true;
       try {
-        const { result } = await this.$axios.$post('http://localhost:8080/mensaje-contacto', command);
+        const { result } = await this.$axios.$post(`${this.$config.backendUrl}/mensaje-contacto`, command);
         this.$emit('success', result);
         this.close();
       } catch (error) {

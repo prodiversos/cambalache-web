@@ -99,7 +99,7 @@ export default {
       this.busquedaTipoArticulo.error = null;
 
       try {
-        const { result } = await this.$axios.$get('http://localhost:8080/tipo-articulo');
+        const { result } = await this.$axios.$get(`${this.$config.backendUrl}/tipo-articulo`);
         this.busquedaTipoArticulo.output = result || [];
         await this.buscarAnuncio();
       } catch (error) {
@@ -129,7 +129,7 @@ export default {
       this.busquedaAnuncio.error = null;
 
       try {
-        const { result } = await this.$axios.$get('http://localhost:8080/anuncio', { params });
+        const { result } = await this.$axios.$get(`${this.$config.backendUrl}/anuncio`, { params });
         this.busquedaAnuncio.output = result || [];
 
       } catch (error) {
