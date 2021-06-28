@@ -1,4 +1,4 @@
-# cambalache-web
+# Cambalache Web
 Frontend Web de la Aplicación Cambalache.
 
 ## Requisitos
